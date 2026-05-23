@@ -13,8 +13,8 @@ const navItems = [
   { label: '자격증', href: '/#qualifications' },
   { label: '수상', href: '/#awards' },
   { label: '세미나', href: '/#projects' },
-  { label: '자가진단', href: '/self-diagnosis' },
   { label: '성장진단', href: '/professional-growth' },
+  { label: '자가진단', href: '/self-diagnosis' },
 ];
 
 export default function Header() {
@@ -68,9 +68,9 @@ export default function Header() {
                     'text-sm font-medium tracking-wide transition-all duration-200 relative',
                     // 기본 텍스트 메뉴
                     !isGrowth && !isSelf && 'text-white/80 hover:text-white',
-                    // 자가진단: 보조 강조 (얇은 테두리)
+                    // 자가진단: #DDDAD7 배경
                     isSelf &&
-                      'text-white/80 border border-white/25 px-4 py-2 rounded-full hover:text-white hover:border-white/50',
+                      'bg-[#DDDAD7] text-[#0A1628] font-semibold px-4 py-2 rounded-full hover:bg-[#ccc9c6] transition-colors',
                     // 성장진단: 메인 강조 (붉은 풀버튼 + 글로우 + NEW 뱃지)
                     isGrowth &&
                       'bg-gradient-to-r from-[#C41E3A] to-[#e02446] text-white font-bold px-5 py-2 rounded-full shadow-lg shadow-red-900/40 hover:shadow-red-900/60 hover:scale-105'

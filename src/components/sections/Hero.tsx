@@ -105,19 +105,19 @@ export default function Hero() {
               transition={{ delay: 0.7, duration: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              {/* 자가진단 버튼 (강조) */}
+              {/* 자가진단 버튼 */}
               <Link
                 href="/self-diagnosis"
-                className="px-8 py-3.5 bg-[#C41E3A] text-white font-semibold rounded-full hover:bg-[#e02446] transition-colors duration-200 text-center"
+                className="px-8 py-3.5 bg-[#DDDAD7] text-[#0A1628] font-semibold rounded-full hover:bg-[#ccc9c6] transition-colors duration-200 text-center"
               >
                 나에게 맞는 관리 찾기
               </Link>
-              {/* 소개 보기 버튼 (아웃라인) */}
+              {/* 성장진단 버튼 */}
               <Link
-                href="#about"
-                className="px-8 py-3.5 border border-white/30 text-white font-medium rounded-full hover:border-white/60 hover:bg-white/5 transition-all duration-200 text-center"
+                href="/professional-growth"
+                className="px-8 py-3.5 bg-[#C41E3A] text-white font-semibold rounded-full hover:bg-[#e02446] transition-colors duration-200 text-center"
               >
-                소개 보기
+                전문가 성장 진단하기
               </Link>
             </motion.div>
           </div>

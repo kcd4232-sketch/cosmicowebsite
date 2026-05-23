@@ -91,7 +91,6 @@ export const useGrowthStore = create<GrowthStoreState>((set, get) => ({
           intentLabel: getLabel('g7'),
           intent: result.intent,
           track: result.track,
-          level: result.level,
           tone: result.tone,
           courseId: result.courseId,
           courseTitle: course?.title || '',

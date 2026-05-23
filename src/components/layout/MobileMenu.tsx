@@ -56,28 +56,43 @@ export default function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProp
 
             {/* 네비게이션 링크 목록 */}
             <nav className="flex flex-col p-6 gap-2">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.07 }}
-                >
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    className={cn(
-                      'block py-3 px-4 text-white/80 text-lg font-medium rounded-lg',
-                      'hover:text-white hover:bg-white/10 transition-colors',
-                      // 자가진단 항목은 강조 스타일
-                      item.label === '자가진단' &&
-                        'mt-4 text-center bg-[#C41E3A] text-white hover:bg-[#e02446] hover:bg-opacity-100'
-                    )}
+              {navItems.map((item, index) => {
+                const isGrowth = item.label === '성장진단';
+                const isSelf = item.label === '자가진단';
+
+                return (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.07 }}
                   >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={item.href}
+                      onClick={onClose}
+                      className={cn(
+                        'block py-3 px-4 text-lg rounded-lg transition-colors relative',
+                        // 일반 메뉴
+                        !isGrowth && !isSelf &&
+                          'text-white/80 font-medium hover:text-white hover:bg-white/10',
+                        // 자가진단: 보조 (테두리)
+                        isSelf &&
+                          'mt-3 text-center text-white/80 font-medium border border-white/25 hover:text-white hover:border-white/50',
+                        // 성장진단: 메인 (붉은 풀버튼 + NEW)
+                        isGrowth &&
+                          'mt-2 text-center bg-gradient-to-r from-[#C41E3A] to-[#e02446] text-white font-bold shadow-lg shadow-red-900/30'
+                      )}
+                    >
+                      {item.label}
+                      {isGrowth && (
+                        <span className="ml-2 inline-block bg-yellow-400 text-[#0A1628] text-[10px] font-extrabold px-1.5 py-0.5 rounded-full align-middle">
+                          NEW
+                        </span>
+                      )}
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </nav>
 
             {/* 하단 소셜 링크 */}

@@ -14,6 +14,7 @@ const navItems = [
   { label: '수상', href: '/#awards' },
   { label: '세미나', href: '/#projects' },
   { label: '자가진단', href: '/self-diagnosis' },
+  { label: '성장진단', href: '/professional-growth' },
 ];
 
 export default function Header() {
@@ -54,22 +55,36 @@ export default function Header() {
           </Link>
 
           {/* 데스크탑 네비게이션 (md 이상에서만 표시) */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'text-white/80 text-sm font-medium tracking-wide',
-                  'hover:text-white transition-colors duration-200',
-                  // 자가진단은 강조 버튼 스타일
-                  item.label === '자가진단' &&
-                    'bg-[#C41E3A] text-white px-4 py-2 rounded-full hover:bg-[#e02446]'
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => {
+              const isGrowth = item.label === '성장진단';
+              const isSelf = item.label === '자가진단';
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'text-sm font-medium tracking-wide transition-all duration-200 relative',
+                    // 기본 텍스트 메뉴
+                    !isGrowth && !isSelf && 'text-white/80 hover:text-white',
+                    // 자가진단: 보조 강조 (얇은 테두리)
+                    isSelf &&
+                      'text-white/80 border border-white/25 px-4 py-2 rounded-full hover:text-white hover:border-white/50',
+                    // 성장진단: 메인 강조 (붉은 풀버튼 + 글로우 + NEW 뱃지)
+                    isGrowth &&
+                      'bg-gradient-to-r from-[#C41E3A] to-[#e02446] text-white font-bold px-5 py-2 rounded-full shadow-lg shadow-red-900/40 hover:shadow-red-900/60 hover:scale-105'
+                  )}
+                >
+                  {item.label}
+                  {isGrowth && (
+                    <span className="absolute -top-2 -right-2 bg-yellow-400 text-[#0A1628] text-[10px] font-extrabold px-1.5 py-0.5 rounded-full leading-none shadow">
+                      NEW
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* 모바일 햄버거 버튼 (md 미만에서만 표시) */}

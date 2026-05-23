@@ -94,8 +94,8 @@ export interface DiagnosisResult {
 }
 
 // ===== 전문가 성장 진단 =====
+// 단일 과정 구조: 입문/정규/마스터 레벨 없음, 트랙당 하나의 과정
 export type CourseTrack = 'bbtt' | 'headspa' | 'plasma' | 'instructor' | 'undecided';
-export type CourseLevel = 'intro' | 'regular' | 'master';
 export type GrowthTone = 'practical' | 'credential' | 'business' | 'instructor' | 'consultation';
 export type GrowthIntent = 'enroll' | 'inquiry' | 'browse' | 'instructor-path';
 
@@ -111,7 +111,6 @@ export interface GrowthOption {
   label: string;
   trackScores: GrowthTrackScores;
   toneHint?: GrowthTone;
-  levelHint?: CourseLevel;
   intent?: GrowthIntent;
 }
 
@@ -126,7 +125,6 @@ export interface GrowthQuestion {
 export interface GrowthRecommendation {
   id: string;
   track: CourseTrack;
-  level: CourseLevel | 'any';
   title: string;
   subtitle: string;
   description: string;
@@ -136,9 +134,9 @@ export interface GrowthRecommendation {
 
 export interface GrowthResult {
   track: CourseTrack;
-  level: CourseLevel | 'any';
   tone: GrowthTone;
   intent: GrowthIntent;
+  region: string; // 활동 지역 라벨
   totals: GrowthTrackScores;
   courseId: string;
 }

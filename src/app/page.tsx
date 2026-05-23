@@ -7,6 +7,7 @@ import Awards from '@/components/sections/Awards';
 import Projects from '@/components/sections/Projects';
 import InstagramSection from '@/components/sections/InstagramSection';
 import DiagnosisCTA from '@/components/sections/DiagnosisCTA';
+import GrowthCTA from '@/components/sections/GrowthCTA';
 
 export default function HomePage() {
   return (
@@ -29,7 +30,10 @@ export default function HomePage() {
       {/* 6. 인스타그램: 팔로우 CTA (크림 배경) */}
       <InstagramSection />
 
-      {/* 7. 자가진단 CTA: 퀴즈 페이지로 유도 (네이비 배경) */}
+      {/* 7. 전문가 성장 진단 CTA: 교육 트랙 추천 (네이비 배경) */}
+      <GrowthCTA />
+
+      {/* 8. 자가진단 CTA: 퀴즈 페이지로 유도 (네이비 배경) */}
       <DiagnosisCTA />
     </>
   );

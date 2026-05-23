@@ -92,3 +92,53 @@ export interface DiagnosisResult {
     comprehensive: number;
   };
 }
+
+// ===== 전문가 성장 진단 =====
+export type CourseTrack = 'bbtt' | 'headspa' | 'plasma' | 'instructor' | 'undecided';
+export type CourseLevel = 'intro' | 'regular' | 'master';
+export type GrowthTone = 'practical' | 'credential' | 'business' | 'instructor' | 'consultation';
+export type GrowthIntent = 'enroll' | 'inquiry' | 'browse' | 'instructor-path';
+
+export interface GrowthTrackScores {
+  bbtt: number;
+  headspa: number;
+  plasma: number;
+  instructor: number;
+}
+
+export interface GrowthOption {
+  id: string;
+  label: string;
+  trackScores: GrowthTrackScores;
+  toneHint?: GrowthTone;
+  levelHint?: CourseLevel;
+  intent?: GrowthIntent;
+}
+
+export interface GrowthQuestion {
+  id: string;
+  step: number;
+  question: string;
+  helperText?: string;
+  options: GrowthOption[];
+}
+
+export interface GrowthRecommendation {
+  id: string;
+  track: CourseTrack;
+  level: CourseLevel | 'any';
+  title: string;
+  subtitle: string;
+  description: string;
+  programs: string[];
+  openingByTone: Record<GrowthTone, string>;
+}
+
+export interface GrowthResult {
+  track: CourseTrack;
+  level: CourseLevel | 'any';
+  tone: GrowthTone;
+  intent: GrowthIntent;
+  totals: GrowthTrackScores;
+  courseId: string;
+}

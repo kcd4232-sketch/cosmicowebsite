@@ -16,7 +16,13 @@ const levelColor: Record<string, string> = {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, phone, bodyScore, scalpScore, bodyLevel, scalpLevel } = body;
+    const {
+      name, phone,
+      bodyScore, scalpScore, bodyLevel, scalpLevel,
+      bodyConcernArea, scalpConcernArea,
+      bodyTitle, bodyDescription, bodyPrograms,
+      scalpTitle, scalpDescription, scalpPrograms,
+    } = body;
 
     if (!name || !phone) {
       return NextResponse.json({ error: '이름과 연락처는 필수입니다.' }, { status: 400 });
@@ -46,6 +52,11 @@ export async function POST(request: NextRequest) {
 
     const now = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
 
+    const buildProgramsList = (programs: string[] | undefined) =>
+      Array.isArray(programs)
+        ? programs.map(p => `<li style="padding:4px 0; font-size:13px; color:#444;">${p}</li>`).join('')
+        : '';
+
     const html = `
 <!DOCTYPE html>
 <html lang="ko">
@@ -57,32 +68,56 @@ export async function POST(request: NextRequest) {
       <p style="color:rgba(255,255,255,0.6); margin:8px 0 0; font-size:13px;">${now}</p>
     </div>
     <div style="padding:28px;">
-      <h2 style="font-size:16px; color:#333; margin-bottom:16px; border-bottom:1px solid #eee; padding-bottom:12px;">고객 정보</h2>
-      <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
+
+      <!-- 고객 정보 -->
+      <h2 style="font-size:15px; color:#333; margin:0 0 12px; border-bottom:1px solid #eee; padding-bottom:10px;">고객 정보</h2>
+      <table style="width:100%; border-collapse:collapse; margin-bottom:28px;">
         <tr>
-          <td style="padding:8px 0; color:#666; font-size:14px; width:80px;">이름</td>
-          <td style="padding:8px 0; color:#111; font-size:14px; font-weight:600;">${name}</td>
+          <td style="padding:7px 0; color:#666; font-size:13px; width:80px;">이름</td>
+          <td style="padding:7px 0; color:#111; font-size:13px; font-weight:600;">${name}</td>
         </tr>
         <tr>
-          <td style="padding:8px 0; color:#666; font-size:14px;">연락처</td>
-          <td style="padding:8px 0; color:#111; font-size:14px; font-weight:600;">${phone}</td>
+          <td style="padding:7px 0; color:#666; font-size:13px;">연락처</td>
+          <td style="padding:7px 0; color:#111; font-size:13px; font-weight:600;">${phone}</td>
         </tr>
       </table>
 
-      <h2 style="font-size:16px; color:#333; margin-bottom:16px; border-bottom:1px solid #eee; padding-bottom:12px;">진단 결과</h2>
-      <div style="display:flex; gap:16px; margin-bottom:24px;">
-        <div style="flex:1; background:#f8f8f8; border-radius:10px; padding:16px; text-align:center;">
-          <div style="font-size:13px; color:#666; margin-bottom:6px;">바디 (BBTT)</div>
-          <div style="font-size:28px; font-weight:700; color:#0A1628;">${bodyScore}점</div>
-          <div style="display:inline-block; margin-top:8px; padding:4px 12px; border-radius:20px; background:${levelColor[bodyLevel] || '#666'}; color:#fff; font-size:12px; font-weight:600;">${levelKorean[bodyLevel] || bodyLevel}</div>
+      <!-- 점수 요약 -->
+      <h2 style="font-size:15px; color:#333; margin:0 0 12px; border-bottom:1px solid #eee; padding-bottom:10px;">진단 점수 요약</h2>
+      <div style="display:flex; gap:12px; margin-bottom:28px;">
+        <div style="flex:1; background:#f0f4f8; border-radius:10px; padding:16px; text-align:center;">
+          <div style="font-size:12px; color:#666; margin-bottom:4px;">바디 (BBTT)</div>
+          <div style="font-size:26px; font-weight:700; color:#0A1628;">${bodyScore}점</div>
+          <div style="display:inline-block; margin-top:6px; padding:3px 10px; border-radius:20px; background:${levelColor[bodyLevel] || '#666'}; color:#fff; font-size:11px; font-weight:600;">${levelKorean[bodyLevel] || bodyLevel}</div>
+          ${bodyConcernArea ? `<div style="margin-top:8px; font-size:11px; color:#555;">주요 호소: ${bodyConcernArea}</div>` : ''}
         </div>
-        <div style="flex:1; background:#f8f8f8; border-radius:10px; padding:16px; text-align:center;">
-          <div style="font-size:13px; color:#666; margin-bottom:6px;">두피 (헤드스파)</div>
-          <div style="font-size:28px; font-weight:700; color:#1a3a5c;">${scalpScore}점</div>
-          <div style="display:inline-block; margin-top:8px; padding:4px 12px; border-radius:20px; background:${levelColor[scalpLevel] || '#666'}; color:#fff; font-size:12px; font-weight:600;">${levelKorean[scalpLevel] || scalpLevel}</div>
+        <div style="flex:1; background:#f0f4f8; border-radius:10px; padding:16px; text-align:center;">
+          <div style="font-size:12px; color:#666; margin-bottom:4px;">두피 (헤드스파)</div>
+          <div style="font-size:26px; font-weight:700; color:#1a3a5c;">${scalpScore}점</div>
+          <div style="display:inline-block; margin-top:6px; padding:3px 10px; border-radius:20px; background:${levelColor[scalpLevel] || '#666'}; color:#fff; font-size:11px; font-weight:600;">${levelKorean[scalpLevel] || scalpLevel}</div>
+          ${scalpConcernArea ? `<div style="margin-top:8px; font-size:11px; color:#555;">주요 증상: ${scalpConcernArea}</div>` : ''}
         </div>
       </div>
 
+      <!-- 바디 진단 상세 -->
+      <h2 style="font-size:15px; color:#0A1628; margin:0 0 10px; border-bottom:2px solid #0A1628; padding-bottom:8px;">💪 바디 진단 상세</h2>
+      <div style="margin-bottom:24px;">
+        <p style="font-size:13px; font-weight:700; color:#111; margin:0 0 6px;">${bodyTitle || ''}</p>
+        <p style="font-size:13px; color:#555; line-height:1.7; margin:0 0 12px;">${bodyDescription || ''}</p>
+        <p style="font-size:12px; color:#888; font-weight:600; margin:0 0 6px; text-transform:uppercase; letter-spacing:0.5px;">추천 프로그램</p>
+        <ul style="margin:0; padding-left:18px;">${buildProgramsList(bodyPrograms)}</ul>
+      </div>
+
+      <!-- 두피 진단 상세 -->
+      <h2 style="font-size:15px; color:#1a3a5c; margin:0 0 10px; border-bottom:2px solid #1a5c8a; padding-bottom:8px;">✨ 두피 진단 상세</h2>
+      <div style="margin-bottom:28px;">
+        <p style="font-size:13px; font-weight:700; color:#111; margin:0 0 6px;">${scalpTitle || ''}</p>
+        <p style="font-size:13px; color:#555; line-height:1.7; margin:0 0 12px;">${scalpDescription || ''}</p>
+        <p style="font-size:12px; color:#888; font-weight:600; margin:0 0 6px; text-transform:uppercase; letter-spacing:0.5px;">추천 프로그램</p>
+        <ul style="margin:0; padding-left:18px;">${buildProgramsList(scalpPrograms)}</ul>
+      </div>
+
+      <!-- 상담 안내 -->
       <div style="background:#fff8e1; border-left:4px solid #C41E3A; padding:12px 16px; border-radius:0 8px 8px 0;">
         <p style="margin:0; font-size:13px; color:#555;">상담 연락처: <strong>${phone}</strong> (${name} 고객님)</p>
       </div>
@@ -98,7 +133,7 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail({
       from: `"COSMICO 자가진단" <${smtpUser}>`,
       to: notificationEmail,
-      subject: `[자가진단] ${name} 고객님 진단 완료 — 바디 ${bodyScore}점(${levelKorean[bodyLevel]}) / 두피 ${scalpScore}점(${levelKorean[scalpLevel]})`,
+      subject: `[자가진단] ${name} 고객님 — 바디 ${bodyScore}점(${levelKorean[bodyLevel]}) / 두피 ${scalpScore}점(${levelKorean[scalpLevel]}) | ${bodyConcernArea || '바디'}·${scalpConcernArea || '두피'}`,
       html,
     });
 

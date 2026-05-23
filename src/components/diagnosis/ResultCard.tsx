@@ -14,6 +14,8 @@ interface ZoneScoreState {
 interface ResultCardProps {
   bodyScore: ZoneScoreState;
   scalpScore: ZoneScoreState;
+  bodyConcernArea: string;
+  scalpConcernArea: string;
   onReset: () => void;
 }
 
@@ -31,7 +33,7 @@ const levelColors: Record<ScoreLevel, string> = {
 
 const MAX_SCORE = 12;
 
-export default function ResultCard({ bodyScore, scalpScore, onReset }: ResultCardProps) {
+export default function ResultCard({ bodyScore, scalpScore, bodyConcernArea, scalpConcernArea, onReset }: ResultCardProps) {
   const bodyRec = bodyRecommendations[bodyScore.level];
   const scalpRec = scalpRecommendations[scalpScore.level];
 
@@ -50,6 +52,7 @@ export default function ResultCard({ bodyScore, scalpScore, onReset }: ResultCar
         categoryName="BBTT 바디밸런스"
         score={bodyScore.score}
         level={bodyScore.level}
+        concernArea={bodyConcernArea}
         recommendation={bodyRec}
         barColor="#0A1628"
         delay={0}
@@ -63,6 +66,7 @@ export default function ResultCard({ bodyScore, scalpScore, onReset }: ResultCar
         categoryName="헤드스파"
         score={scalpScore.score}
         level={scalpScore.level}
+        concernArea={scalpConcernArea}
         recommendation={scalpRec}
         barColor="#1a5c8a"
         delay={0.2}
@@ -116,13 +120,14 @@ interface ZoneResultCardProps {
   categoryName: string;
   score: number;
   level: ScoreLevel;
+  concernArea: string;
   recommendation: { title: string; description: string; programs: string[] };
   barColor: string;
   delay: number;
 }
 
 function ZoneResultCard({
-  label, icon, categoryName, score, level, recommendation, barColor, delay,
+  label, icon, categoryName, score, level, concernArea, recommendation, barColor, delay,
 }: ZoneResultCardProps) {
   return (
     <motion.div
@@ -150,6 +155,14 @@ function ZoneResultCard({
           </span>
         </div>
       </div>
+
+      {/* 주요 호소 부위/증상 */}
+      {concernArea && (
+        <div className="flex items-center gap-2 mb-3 px-3 py-2 bg-white/5 rounded-lg border border-white/10">
+          <span className="text-white/40 text-xs">주요 호소</span>
+          <span className="text-white/80 text-xs font-medium">{concernArea}</span>
+        </div>
+      )}
 
       <div className="h-px bg-white/10 mb-4" />
 

@@ -19,6 +19,8 @@ export default function QuizContainer() {
     selectedAnswers,
     bodyScore,
     scalpScore,
+    bodyConcernArea,
+    scalpConcernArea,
     isSubmitting,
     selectAnswer,
     nextStep,
@@ -34,6 +36,8 @@ export default function QuizContainer() {
         <ResultCard
           bodyScore={bodyScore}
           scalpScore={scalpScore}
+          bodyConcernArea={bodyConcernArea}
+          scalpConcernArea={scalpConcernArea}
           onReset={reset}
         />
       </div>

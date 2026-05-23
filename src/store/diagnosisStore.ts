@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { CustomerInfo, ScoreLevel } from '@/types';
-import { bodyQuestions, scalpQuestions, getScoreLevel } from '@/data/diagnosis';
+import { bodyQuestions, scalpQuestions, getScoreLevel, bodyRecommendations, scalpRecommendations } from '@/data/diagnosis';
 
 export type DiagnosisPhase = 'body-quiz' | 'scalp-quiz' | 'customer-info' | 'results';
 
@@ -19,6 +19,8 @@ interface DiagnosisState {
   selectedAnswers: SelectedAnswers;
   bodyScore: ZoneScoreState;
   scalpScore: ZoneScoreState;
+  bodyConcernArea: string;
+  scalpConcernArea: string;
   customerInfo: CustomerInfo | null;
   isSubmitting: boolean;
 
@@ -38,6 +40,8 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
   selectedAnswers: {},
   bodyScore: { ...initialZoneScore },
   scalpScore: { ...initialZoneScore },
+  bodyConcernArea: '',
+  scalpConcernArea: '',
   customerInfo: null,
   isSubmitting: false,
 
@@ -112,15 +116,29 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
       }
     });
 
+    // b1(주요 호소 부위), s1(주요 두피 증상) 선택 라벨 추출
+    const b1OptionId = selectedAnswers['b1'];
+    const b1Option = bodyQuestions.find(q => q.id === 'b1')?.options.find(o => o.id === b1OptionId);
+    const bodyConcernArea = b1Option?.label || '';
+
+    const s1OptionId = selectedAnswers['s1'];
+    const s1Option = scalpQuestions.find(q => q.id === 's1')?.options.find(o => o.id === s1OptionId);
+    const scalpConcernArea = s1Option?.label || '';
+
     set({
       bodyScore: { score: bodyTotal, level: getScoreLevel(bodyTotal) },
       scalpScore: { score: scalpTotal, level: getScoreLevel(scalpTotal) },
+      bodyConcernArea,
+      scalpConcernArea,
     });
   },
 
   submitCustomerInfo: async (info: CustomerInfo) => {
     set({ isSubmitting: true, customerInfo: info });
-    const { bodyScore, scalpScore } = get();
+    const { bodyScore, scalpScore, bodyConcernArea, scalpConcernArea } = get();
+
+    const bodyRec = bodyRecommendations[bodyScore.level];
+    const scalpRec = scalpRecommendations[scalpScore.level];
 
     try {
       await fetch('/api/diagnosis-email', {
@@ -133,6 +151,14 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
           scalpScore: scalpScore.score,
           bodyLevel: bodyScore.level,
           scalpLevel: scalpScore.level,
+          bodyConcernArea,
+          scalpConcernArea,
+          bodyTitle: bodyRec.title,
+          bodyDescription: bodyRec.description,
+          bodyPrograms: bodyRec.programs,
+          scalpTitle: scalpRec.title,
+          scalpDescription: scalpRec.description,
+          scalpPrograms: scalpRec.programs,
         }),
       });
     } catch {
@@ -149,6 +175,8 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
       selectedAnswers: {},
       bodyScore: { ...initialZoneScore },
       scalpScore: { ...initialZoneScore },
+      bodyConcernArea: '',
+      scalpConcernArea: '',
       customerInfo: null,
       isSubmitting: false,
     });

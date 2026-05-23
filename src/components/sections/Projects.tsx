@@ -16,8 +16,6 @@ const categoryColors: Record<string, string> = {
   bbtt: 'bg-blue-500',
   headspa: 'bg-teal-500',
   plasma: 'bg-red-500',
-  seminar: 'bg-purple-500',
-  international: 'bg-orange-500',
 };
 
 // 개별 프로젝트 카드
@@ -35,15 +33,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-[#C41E3A]/50 transition-all duration-300 hover:-translate-y-1">
           {/* 이미지 영역 */}
           <div className="relative aspect-video bg-white/5 overflow-hidden">
-            {/* 실제 이미지가 없을 때 플레이스홀더 */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-white/10 text-center">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" className="mx-auto mb-2">
-                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                <p className="text-xs">사진 준비 중</p>
+            {project.coverImage ? (
+              <img
+                src={project.coverImage}
+                alt={project.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-white/10 text-center">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" className="mx-auto mb-2">
+                    <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <p className="text-xs">사진 준비 중</p>
+                </div>
               </div>
-            </div>
+            )}
             {/* 카테고리 뱃지 */}
             <div className="absolute top-3 left-3">
               <span className={cn(

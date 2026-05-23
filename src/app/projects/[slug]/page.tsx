@@ -46,6 +46,13 @@ export default async function ProjectDetailPage({
     <div className="min-h-screen bg-[#0A1628]">
       {/* ===== 히어로 이미지 영역 ===== */}
       <div className="relative h-64 md:h-96 bg-[#1a2a45] flex items-end">
+        {project.coverImage && (
+          <img
+            src={project.coverImage}
+            alt={project.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         {/* 배경 그라데이션 오버레이 */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628] to-transparent" />
 
@@ -113,7 +120,13 @@ export default async function ProjectDetailPage({
               <h2 className="text-white font-bold text-xl mb-4">사진</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {project.gallery.map((img, i) => (
-                  <div key={i} className="aspect-square bg-white/5 rounded-xl" />
+                  <div key={i} className="aspect-square bg-white/5 rounded-xl overflow-hidden">
+                    <img
+                      src={img}
+                      alt={`${project.title} ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 ))}
               </div>
             </div>

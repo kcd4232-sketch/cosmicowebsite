@@ -49,6 +49,11 @@ export interface ZoneRecommendation {
   programs: string[];
 }
 
+export interface DiagnosisConcern {
+  bodyConcernArea: string;
+  scalpConcernArea: string;
+}
+
 export interface CustomerInfo {
   name: string;
   phone: string;

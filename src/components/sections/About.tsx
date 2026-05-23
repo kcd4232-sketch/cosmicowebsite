@@ -22,7 +22,7 @@ export default function About() {
               {/* 메인 사진 */}
               <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/images/profile/profile-2.jpg"
+                  src="/images/profile/profile-2.png"
                   alt="윤소연 원장"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -74,6 +74,17 @@ export default function About() {
                       </span>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* 샵 위치 정보 */}
+              <div className="flex items-start gap-3 mb-6 p-4 bg-[#0A1628]/10 rounded-xl">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" strokeWidth="2" className="mt-0.5 shrink-0">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                <div>
+                  <p className="text-[#0A1628] font-semibold text-sm">아임뷰티</p>
+                  <p className="text-[#0A1628]/60 text-sm mt-0.5">대구 달성군 옥포읍 돌미로2서길6 3층 302호</p>
                 </div>
               </div>
 

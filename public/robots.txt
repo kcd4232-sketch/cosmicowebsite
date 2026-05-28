@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.headspabbtt.com/sitemap.xml
+
+#DaumWebMasterTool:152edecb0631ab54025490089f211f7778c87dbc0c32e981f030da136709becd:hlFxWg8VeJ8VnIjdtMJHZQ==

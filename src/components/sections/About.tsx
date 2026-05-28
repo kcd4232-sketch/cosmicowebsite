@@ -32,8 +32,8 @@ export default function About() {
 
               {/* 수상 실적 요약 카드 — 모바일: 오른쪽에서 잘리지 않게 right-4, 데스크탑: -right-6 */}
               <div className="absolute -bottom-4 right-4 md:-bottom-6 md:-right-6 bg-[#0A1628] text-white p-4 md:p-5 rounded-xl shadow-xl">
-                <p className="text-[#C41E3A] text-3xl font-bold">4+</p>
-                <p className="text-white/70 text-sm mt-1">국제대회 수상</p>
+                <p className="text-[#C41E3A] text-3xl font-bold">6+</p>
+                <p className="text-white/70 text-sm mt-1">수상 & 해외강의</p>
               </div>
             </div>
           </AnimatedSection>
@@ -42,7 +42,7 @@ export default function About() {
           <AnimatedSection direction="right" delay={0.2}>
             <div>
               <SectionTitle
-                title="원장 소개"
+                title="원장 소개 | 헤드스파 전문 강사 윤소연"
                 subtitle="About"
                 align="left"
                 light={true}

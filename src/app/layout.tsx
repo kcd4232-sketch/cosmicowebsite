@@ -15,20 +15,19 @@ export const viewport: Viewport = {
 
 // ===== SEO 메타데이터 설정 =====
 export const metadata: Metadata = {
-  title: {
-    default: '윤소연 원장 | COSMICO KOREA 마사지 테라피스트',
-    template: '%s | 윤소연 원장',
-  },
-  description:
-    'COSMICO KOREA 소속 마사지 테라피스트 겸 강사 윤소연 원장. BBTT(Body Balance Technical Training), 헤드스파, 플라즈마 전문. 국제대회 수상 경력 보유.',
-  keywords: ['마사지', 'BBTT', '헤드스파', '플라즈마', 'COSMICO KOREA', '윤소연', '마사지 테라피스트', '피부관리'],
+  title: "헤드스파 교육·두피관리사 자격증 | 대구 BBTT 윤소연",
+  description: "국제대회 수상 강사가 직접 지도하는 헤드스파·두피관리·근막관리 전문가 과정. 두피관리사 자격증, 헤드스파 강사 양성, BBTT 정규 교육. 베트남·스리랑카·몽골 국제 강의.",
+  keywords: "헤드스파 교육, 두피관리사 자격증, 헤드스파 강사, 림프마사지 교육, 에스테틱 강사, 대구 헤드스파, BBTT, 바디밸런스, 피부관리사 스킬업",
   authors: [{ name: '윤소연' }],
+  verification: {
+    google: '89259iO8gCvABhsT8E7hCl0Wn6NhSbpzdTWiPqJsOpA',
+    other: { 'naver-site-verification': '9eac2443477ede31e1c8d675badfd8f5dcebe7cb' },
+  },
   openGraph: {
-    type: 'website',
-    locale: 'ko_KR',
-    siteName: '윤소연 원장 프로필',
-    title: '윤소연 원장 | COSMICO KOREA',
-    description: 'BBTT · Head Spa · Plasma 전문 마사지 테라피스트 겸 강사',
+    title: "헤드스파 교육·두피관리사 자격증 | 윤소연 COSMICO KOREA",
+    description: "국제대회 수상 강사가 직접 지도하는 헤드스파 전문가 양성 과정",
+    locale: "ko_KR",
+    type: "website",
   },
 };
 

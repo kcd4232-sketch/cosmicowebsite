@@ -23,7 +23,7 @@ export default function About() {
               <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/images/profile/profile-2.png"
-                  alt="윤소연 원장"
+                  alt="윤소연 원장 프로필 - COSMICO KOREA BBTT 헤드스파 전문 강사"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover object-top"

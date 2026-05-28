@@ -49,7 +49,7 @@ export default async function ProjectDetailPage({
         {project.coverImage && (
           <img
             src={project.coverImage}
-            alt={project.title}
+            alt={project.coverAlt || project.title}
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
@@ -123,7 +123,7 @@ export default async function ProjectDetailPage({
                   <div key={i} className="aspect-square bg-white/5 rounded-xl overflow-hidden">
                     <img
                       src={img}
-                      alt={`${project.title} ${i + 1}`}
+                      alt={project.galleryAltBase ? `${project.galleryAltBase} ${i + 1}` : `${project.title} ${i + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </div>

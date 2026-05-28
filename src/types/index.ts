@@ -28,7 +28,9 @@ export interface Project {
   description: string;
   longDescription?: string;
   coverImage: string;
+  coverAlt?: string;        // 커버 이미지 SEO alt (없으면 title 사용)
   gallery?: string[];
+  galleryAltBase?: string;  // 갤러리 이미지 alt 기본 문구 (뒤에 번호 붙음)
   tags: string[];
   featured?: boolean;
 }

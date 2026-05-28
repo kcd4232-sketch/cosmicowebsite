@@ -16,12 +16,14 @@ export const projects: Project[] = [
 
 바디 밸런스의 핵심 원리와 실전 테크닉을 집중적으로 다루며, 참가자들이 현장에서 바로 적용할 수 있는 실습 중심의 교육으로 진행되었습니다.`,
     coverImage: '/images/seminars/bbtt-workshop-hwaseong.jpg.png',
+    coverAlt: '2026 경기도 화성 BBTT 워크샵 - 바디밸런스 테크닉 전문가 교육',
     gallery: [
       '/images/seminars/bbtt-workshop-hwaseong-1.jpg.png',
       '/images/seminars/bbtt-workshop-hwaseong-2.jpg.png',
       '/images/seminars/bbtt-workshop-hwaseong-3.jpg.png',
       '/images/seminars/bbtt-workshop-hwaseong-4.jpg.png',
     ],
+    galleryAltBase: '2026 경기도 화성 BBTT 워크샵 현장 - 바디밸런스 테크닉 실습',
     tags: ['BBTT', '바디밸런스', '워크샵', '화성', '경기도'],
     featured: false,
   },
@@ -41,6 +43,7 @@ export const projects: Project[] = [
 
 참가자들이 현장에서 즉시 활용 가능한 BBTT 테크닉을 습득할 수 있도록 이론과 실습을 병행하여 진행하였습니다.`,
     coverImage: '/images/seminars/mongolia-bbtt-2026.jpg.png',
+    coverAlt: '2026 몽골 BBTT 세미나 - 윤소연 원장 해외 전문가 교육',
     gallery: [
       '/images/seminars/mongolia-bbtt-2026-1.jpg.png',
       '/images/seminars/mongolia-bbtt-2026-2.jpg.png',
@@ -50,6 +53,7 @@ export const projects: Project[] = [
       '/images/seminars/mongolia-bbtt-2026-6.jpg.png',
       '/images/seminars/mongolia-bbtt-2026-7.jpg.png',
     ],
+    galleryAltBase: '2026 몽골 BBTT 세미나 현장 - 두피 림프 마사지 실습',
     tags: ['BBTT', '바디밸런스', '테크닉교육', '몽골', '해외세미나'],
     featured: true,
   },
@@ -66,11 +70,13 @@ export const projects: Project[] = [
 
 현장 실습 중심의 교육으로 이론과 실제를 함께 배울 수 있는 기회를 제공합니다.`,
     coverImage: '/images/seminars/busan-seminar.jpg.jpg',
+    coverAlt: '2024 부산 BBTT 세미나 - 지역 전문가 교육',
     gallery: [
       '/images/seminars/busan-seminar-1.jpg.jpg',
       '/images/seminars/busan-seminar-2.jpg.jpg',
       '/images/seminars/busan-seminar-3.jpg.jpg',
     ],
+    galleryAltBase: '2024 부산 BBTT 세미나 현장 - 바디밸런스 전문가 실습',
     tags: ['BBTT', '부산', '바디밸런스', '전문가교육'],
     featured: false,
   },
@@ -87,6 +93,7 @@ export const projects: Project[] = [
 
 한국의 선진 BBTT 테크닉을 해외 전문가들에게 전수하고, 다양한 문화적 배경을 가진 전문가들과 기술을 교류하는 글로벌 세미나입니다.`,
     coverImage: '/images/seminars/srilanka-seminar.jpg.png',
+    coverAlt: '2024 스리랑카 BBTT 국제 세미나 - 해외 전문가 교육',
     gallery: [
       '/images/seminars/srilanka-seminar-1.jpg.png',
       '/images/seminars/srilanka-seminar-2.jpg.png',
@@ -96,6 +103,7 @@ export const projects: Project[] = [
       '/images/seminars/srilanka-seminar-6.jpg.png',
       '/images/seminars/srilanka-seminar-7.jpg.png',
     ],
+    galleryAltBase: '2024 스리랑카 BBTT 국제 세미나 현장 - 해외 전문가 교육',
     tags: ['BBTT', '스리랑카', '국제세미나', '해외교육'],
     featured: true,
   },
@@ -114,6 +122,7 @@ export const projects: Project[] = [
 
 림프 해독 메커니즘과 헤드스파의 결합으로 두피 건강과 전신 순환을 동시에 케어하는 고급 기술을 전수합니다.`,
     coverImage: '/images/seminars/gbtt-vietnam-2025.jpg.png',
+    coverAlt: '2025 베트남 GBTT 마스터 림프 해독 헤드스파 국제 세미나',
     gallery: [
       '/images/seminars/gbtt-vietnam-2025-1.jpg.png',
       '/images/seminars/gbtt-vietnam-2025-2.jpg.png',
@@ -126,6 +135,7 @@ export const projects: Project[] = [
       '/images/seminars/gbtt-vietnam-2025-9.jpg.png',
       '/images/seminars/gbtt-vietnam-2025-10.jpg.png',
     ],
+    galleryAltBase: '2025 베트남 GBTT 세미나 강의 모습 - 헤드스파 림프 해독 교육',
     tags: ['헤드스파', '림프해독', 'GBTT', '베트남', '국제세미나'],
     featured: true,
   },
@@ -142,11 +152,13 @@ export const projects: Project[] = [
 
 두피 건강 관리와 림프 순환 테크닉을 결합한 실습 중심의 교육으로, 현장에서 바로 활용할 수 있는 헤드스파 기술을 전수합니다.`,
     coverImage: '/images/seminars/headspa-daegu.jpg.jpg',
+    coverAlt: '2025 대구 헤드스파 세미나 - 두피관리 전문가 교육',
     gallery: [
       '/images/seminars/headspa-daegu-1.jpg.jpg',
       '/images/seminars/headspa-daegu-2.jpg.jpg',
       '/images/seminars/headspa-daegu-3.jpg.jpg',
     ],
+    galleryAltBase: '2025 대구 헤드스파 세미나 현장 - 두피관리 실습',
     tags: ['헤드스파', '대구', '두피케어', '림프순환', '세미나'],
     featured: false,
   },

@@ -36,8 +36,8 @@ export default function Hero() {
             {/* 프로필 이미지 */}
             <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-white/20">
               <Image
-                src="/images/profile/profile-1.jpg"
-                alt="윤소연 원장 프로필 사진"
+                src="/images/profile/profile-1.png"
+                alt="헤드스파 강사 윤소연 원장 - 국제대회 수상 두피관리 전문가"
                 fill
                 sizes="(max-width: 768px) 224px, 288px"
                 className="object-cover object-top"

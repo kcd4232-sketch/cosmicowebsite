@@ -36,7 +36,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.coverImage ? (
               <img
                 src={project.coverImage}
-                alt={project.title}
+                alt={project.coverAlt || project.title}
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (

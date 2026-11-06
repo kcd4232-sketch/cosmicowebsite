@@ -59,6 +59,9 @@ export interface DiagnosisConcern {
 export interface CustomerInfo {
   name: string;
   phone: string;
+  privacyConsent: boolean;   // [필수] 개인정보 수집·이용 동의
+  marketingConsent: boolean; // [선택] 광고성 정보 수신 동의
+  consentedAt: string;       // 동의 시각 (ISO)
 }
 
 export interface DiagnosisQuestion {

@@ -147,6 +147,9 @@ export const useDiagnosisStore = create<DiagnosisState>((set, get) => ({
         body: JSON.stringify({
           name: info.name,
           phone: info.phone,
+          privacyConsent: info.privacyConsent,
+          marketingConsent: info.marketingConsent,
+          consentedAt: info.consentedAt,
           bodyScore: bodyScore.score,
           scalpScore: scalpScore.score,
           bodyLevel: bodyScore.level,

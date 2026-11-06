@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { consentEmailBlock, escapeHtml } from '@/lib/consent';
 
 const levelKorean: Record<string, string> = {
   low: '낮음',
@@ -17,16 +18,23 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
-      name, phone,
+      name: rawName, phone: rawPhone,
+      privacyConsent, marketingConsent, consentedAt,
       bodyScore, scalpScore, bodyLevel, scalpLevel,
       bodyConcernArea, scalpConcernArea,
       bodyTitle, bodyDescription, bodyPrograms,
       scalpTitle, scalpDescription, scalpPrograms,
     } = body;
 
-    if (!name || !phone) {
+    if (!rawName || !rawPhone) {
       return NextResponse.json({ error: '이름과 연락처는 필수입니다.' }, { status: 400 });
     }
+    if (privacyConsent !== true) {
+      return NextResponse.json({ error: '개인정보 수집·이용 동의가 필요합니다.' }, { status: 400 });
+    }
+    const name = escapeHtml(rawName);
+    const phone = escapeHtml(rawPhone);
+    const marketingOk = marketingConsent === true;
 
     // SMTP 설정 확인
     const smtpHost = process.env.SMTP_HOST;
@@ -38,7 +46,7 @@ export async function POST(request: NextRequest) {
     if (!smtpHost || !smtpUser || !smtpPass) {
       // SMTP 미설정 시 로그만 남기고 성공 응답 (개발 환경)
       console.log('[Diagnosis Email] SMTP not configured. Diagnosis data:', {
-        name, phone, bodyScore, scalpScore, bodyLevel, scalpLevel,
+        name, phone, bodyScore, scalpScore, bodyLevel, scalpLevel, marketingOk, consentedAt,
       });
       return NextResponse.json({ success: true, message: 'SMTP not configured (dev mode)' });
     }
@@ -117,6 +125,8 @@ export async function POST(request: NextRequest) {
         <ul style="margin:0; padding-left:18px;">${buildProgramsList(scalpPrograms)}</ul>
       </div>
 
+${consentEmailBlock(marketingOk, consentedAt)}
+
       <!-- 상담 안내 -->
       <div style="background:#fff8e1; border-left:4px solid #C41E3A; padding:12px 16px; border-radius:0 8px 8px 0;">
         <p style="margin:0; font-size:13px; color:#555;">상담 연락처: <strong>${phone}</strong> (${name} 고객님)</p>
@@ -133,7 +143,7 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail({
       from: `"COSMICO 자가진단" <${smtpUser}>`,
       to: notificationEmail,
-      subject: `[자가진단] ${name} 고객님 — 바디 ${bodyScore}점(${levelKorean[bodyLevel]}) / 두피 ${scalpScore}점(${levelKorean[scalpLevel]}) | ${bodyConcernArea || '바디'}·${scalpConcernArea || '두피'}`,
+      subject: `[자가진단]${marketingOk ? '[광고동의]' : ''} ${rawName} 고객님 — 바디 ${bodyScore}점(${levelKorean[bodyLevel]}) / 두피 ${scalpScore}점(${levelKorean[scalpLevel]}) | ${bodyConcernArea || '바디'}·${scalpConcernArea || '두피'}`,
       html,
     });
 

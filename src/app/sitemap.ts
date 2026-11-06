@@ -17,12 +17,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${BASE_URL}/self-diagnosis`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
       url: `${BASE_URL}/projects/bbtt-workshop-hwaseong`,
       lastModified: new Date(),
       changeFrequency: 'yearly',

@@ -1,12 +1,12 @@
 // 메인 페이지: 모든 섹션을 순서대로 조합하는 싱글 페이지
-// 순서: Hero → About → Qualifications → Awards → Projects → Instagram → DiagnosisCTA
+// 순서: Hero → About → Qualifications → Awards → Projects → Instagram → GrowthCTA
+// 고객 자가진단(DiagnosisCTA)은 교육생 모집 중심 개편으로 메인에서 제외 (코드는 보존)
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
 import Qualifications from '@/components/sections/Qualifications';
 import Awards from '@/components/sections/Awards';
 import Projects from '@/components/sections/Projects';
 import InstagramSection from '@/components/sections/InstagramSection';
-import DiagnosisCTA from '@/components/sections/DiagnosisCTA';
 import GrowthCTA from '@/components/sections/GrowthCTA';
 
 export default function HomePage() {
@@ -32,9 +32,6 @@ export default function HomePage() {
 
       {/* 7. 전문가 성장 진단 CTA: 교육 트랙 추천 (네이비 배경) */}
       <GrowthCTA />
-
-      {/* 8. 자가진단 CTA: 퀴즈 페이지로 유도 (네이비 배경) */}
-      <DiagnosisCTA />
     </>
   );
 }

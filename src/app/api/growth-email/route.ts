@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { consentEmailBlock, escapeHtml } from '@/lib/consent';
 
 const intentEmoji: Record<string, string> = {
   enroll: '🔥',
@@ -34,16 +35,23 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
-      name, phone,
-      field, interest, goal, experience, priority, format, intentLabel,
+      phone: rawPhone,
+      answers,
       intent, track, level, tone, courseId,
       courseTitle, courseSubtitle, courseDescription, coursePrograms,
       totals,
+      privacyConsent, marketingConsent, consentedAt,
     } = body;
 
-    if (!name || !phone) {
+    if (!body.name || !rawPhone) {
       return NextResponse.json({ error: '이름과 연락처는 필수입니다.' }, { status: 400 });
     }
+    if (privacyConsent !== true) {
+      return NextResponse.json({ error: '개인정보 수집·이용 동의가 필요합니다.' }, { status: 400 });
+    }
+    const name = escapeHtml(body.name);
+    const phone = escapeHtml(rawPhone);
+    const marketingOk = marketingConsent === true;
 
     const smtpHost = process.env.SMTP_HOST;
     const smtpPort = process.env.SMTP_PORT;
@@ -56,11 +64,11 @@ export async function POST(request: NextRequest) {
     const trackKo = trackKorean[track] || track;
     const levelKo = levelKorean[level] || level;
 
-    const subject = `[성장진단·${emoji} ${intentKo}] ${name} 고객님 — ${trackKo}/${levelKo} · ${courseTitle}`;
+    const subject = `[성장진단·${emoji} ${intentKo}]${marketingOk ? '[광고동의]' : ''} ${body.name} 고객님 — ${trackKo}${levelKo ? `/${levelKo}` : ''} · ${courseTitle}`;
 
     if (!smtpHost || !smtpUser || !smtpPass) {
       console.log('[Growth Email] SMTP not configured. Growth diagnosis data:', {
-        name, phone, intent, track, level, tone, courseId,
+        name, phone, intent, track, level, tone, courseId, marketingOk, consentedAt,
       });
       return NextResponse.json({ success: true, message: 'SMTP not configured (dev mode)' });
     }
@@ -142,22 +150,16 @@ export async function POST(request: NextRequest) {
         ${buildScoreBar('강사 양성', totals?.instructor || 0, '#C41E3A')}
       </div>
 
-      <h2 style="font-size:15px; color:#333; margin:0 0 12px; border-bottom:1px solid #eee; padding-bottom:10px;">7개 질문 응답</h2>
+      <h2 style="font-size:15px; color:#333; margin:0 0 12px; border-bottom:1px solid #eee; padding-bottom:10px;">설문 응답</h2>
       <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
-        ${[
-          ['Q1 활동 분야', field],
-          ['Q2 관심 교육', interest],
-          ['Q3 목표', goal],
-          ['Q4 경력', experience],
-          ['Q5 중요 가치', priority],
-          ['Q6 선호 형태', format],
-          ['Q7 참여 의향', intentLabel],
-        ].map(([q, a]) => `
+        ${(Array.isArray(answers) ? answers : []).map((a: { question?: string; answer?: string }, i: number) => `
         <tr>
-          <td style="padding:6px 0; color:#666; font-size:12px; width:110px; vertical-align:top;">${q}</td>
-          <td style="padding:6px 0; color:#111; font-size:12px;">${a || '-'}</td>
+          <td style="padding:6px 0; color:#666; font-size:12px; width:46%; vertical-align:top;">Q${i + 1}. ${escapeHtml(a?.question)}</td>
+          <td style="padding:6px 0; color:#111; font-size:12px;">${escapeHtml(a?.answer) || '-'}</td>
         </tr>`).join('')}
       </table>
+
+${consentEmailBlock(marketingOk, consentedAt)}
 
       <div style="background:#fff8e1; border-left:4px solid #C41E3A; padding:12px 16px; border-radius:0 8px 8px 0;">
         <p style="margin:0; font-size:13px; color:#555;">상담 연락처: <strong>${phone}</strong> (${name} 고객님)</p>

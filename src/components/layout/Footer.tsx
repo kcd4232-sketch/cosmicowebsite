@@ -20,7 +20,7 @@ export default function Footer() {
             <Link href="/#qualifications" className="py-1.5 px-1 hover:text-white transition-colors">자격증</Link>
             <Link href="/#awards" className="py-1.5 px-1 hover:text-white transition-colors">수상</Link>
             <Link href="/#projects" className="py-1.5 px-1 hover:text-white transition-colors">세미나</Link>
-            <Link href="/self-diagnosis" className="py-1.5 px-1 hover:text-white transition-colors">자가진단</Link>
+            <Link href="/professional-growth" className="py-1.5 px-1 hover:text-white transition-colors">성장진단</Link>
           </nav>
 
           {/* 오른쪽: 소셜 링크 */}

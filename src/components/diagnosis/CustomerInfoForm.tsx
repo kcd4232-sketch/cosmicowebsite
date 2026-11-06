@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { CustomerInfo } from '@/types';
+import { privacyConsentText, marketingConsentText } from '@/lib/consent';
 
 interface CustomerInfoFormProps {
   onSubmit: (info: CustomerInfo) => void;
@@ -15,16 +16,27 @@ const PHONE_REGEX = /^01[016789]-?\d{3,4}-?\d{4}$/;
 export default function CustomerInfoForm({ onSubmit, onBack, isSubmitting }: CustomerInfoFormProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [errors, setErrors] = useState<{ name?: string; phone?: string; privacy?: string }>({});
+
+  const allChecked = privacyConsent && marketingConsent;
+  const toggleAll = () => {
+    const next = !allChecked;
+    setPrivacyConsent(next);
+    setMarketingConsent(next);
+    if (next) setErrors((e) => ({ ...e, privacy: undefined }));
+  };
 
   const validate = () => {
-    const newErrors: { name?: string; phone?: string } = {};
+    const newErrors: { name?: string; phone?: string; privacy?: string } = {};
     if (!name.trim()) newErrors.name = '이름을 입력해주세요';
     if (!phone.trim()) {
       newErrors.phone = '연락처를 입력해주세요';
     } else if (!PHONE_REGEX.test(phone.replace(/\s/g, ''))) {
       newErrors.phone = '올바른 전화번호 형식으로 입력해주세요 (예: 010-1234-5678)';
     }
+    if (!privacyConsent) newErrors.privacy = '개인정보 수집·이용에 동의해주셔야 결과를 받아보실 수 있어요';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -32,7 +44,13 @@ export default function CustomerInfoForm({ onSubmit, onBack, isSubmitting }: Cus
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      onSubmit({ name: name.trim(), phone: phone.trim() });
+      onSubmit({
+        name: name.trim(),
+        phone: phone.trim(),
+        privacyConsent,
+        marketingConsent,
+        consentedAt: new Date().toISOString(),
+      });
     }
   };
 
@@ -95,9 +113,34 @@ export default function CustomerInfoForm({ onSubmit, onBack, isSubmitting }: Cus
             )}
           </div>
 
-          <p className="text-white/30 text-xs">
-            * 입력하신 정보는 진단 결과 전달 목적으로만 사용됩니다.
-          </p>
+          {/* 동의 항목 */}
+          <div className="pt-2 space-y-3">
+            <label className="flex items-center gap-3 bg-white/5 border border-white/15 rounded-xl px-4 py-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={allChecked}
+                onChange={toggleAll}
+                className="w-5 h-5 flex-none accent-[#C41E3A] cursor-pointer"
+              />
+              <span className="text-white font-semibold text-sm">전체 동의</span>
+            </label>
+
+            <ConsentItem
+              checked={privacyConsent}
+              onChange={(v) => {
+                setPrivacyConsent(v);
+                if (v) setErrors((e) => ({ ...e, privacy: undefined }));
+              }}
+              content={privacyConsentText}
+              required
+            />
+            <ConsentItem
+              checked={marketingConsent}
+              onChange={setMarketingConsent}
+              content={marketingConsentText}
+            />
+            {errors.privacy && <p className="text-red-400 text-xs">{errors.privacy}</p>}
+          </div>
         </form>
       </div>
 
@@ -114,7 +157,7 @@ export default function CustomerInfoForm({ onSubmit, onBack, isSubmitting }: Cus
         <button
           type="submit"
           onClick={handleSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !privacyConsent}
           className="flex-1 flex items-center justify-center gap-2 px-8 py-3 bg-[#C41E3A] text-white font-bold rounded-full hover:bg-[#e02446] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
@@ -131,5 +174,62 @@ export default function CustomerInfoForm({ onSubmit, onBack, isSubmitting }: Cus
         </button>
       </div>
     </motion.div>
+  );
+}
+
+interface ConsentItemProps {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  content: { title: string; rows: readonly (readonly [string, string])[]; refusal: string };
+  required?: boolean;
+}
+
+function ConsentItem({ checked, onChange, content, required }: ConsentItemProps) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="px-1">
+      <div className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          aria-label={content.title}
+          className="w-5 h-5 mt-0.5 flex-none accent-[#C41E3A] cursor-pointer"
+        />
+        <button
+          type="button"
+          onClick={() => onChange(!checked)}
+          className="flex-1 text-left text-sm text-white/80"
+        >
+          <span className={required ? 'text-[#ff6b6b] font-semibold' : 'text-white/50 font-semibold'}>
+            {content.title.slice(0, 4)}
+          </span>
+          {content.title.slice(4)}
+        </button>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          className="text-white/40 hover:text-white text-xs underline underline-offset-2 flex-none"
+        >
+          {open ? '닫기' : '보기'}
+        </button>
+      </div>
+      {open && (
+        <div className="mt-2 ml-8 bg-white/5 border border-white/10 rounded-lg p-3 text-xs text-white/60 leading-relaxed">
+          <table className="w-full">
+            <tbody>
+              {content.rows.map(([k, v]) => (
+                <tr key={k}>
+                  <td className="pr-3 py-1 align-top text-white/40 whitespace-nowrap">{k}</td>
+                  <td className="py-1">{v}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="mt-2 text-white/40">{content.refusal}</p>
+        </div>
+      )}
+    </div>
   );
 }

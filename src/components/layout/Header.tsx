@@ -14,7 +14,6 @@ const navItems = [
   { label: '수상', href: '/#awards' },
   { label: '세미나', href: '/#projects' },
   { label: '성장진단', href: '/professional-growth' },
-  { label: '자가진단', href: '/self-diagnosis' },
 ];
 
 export default function Header() {

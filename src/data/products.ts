@@ -1,13 +1,14 @@
 // 헤드스파 제품 상세 페이지 데이터 (시안)
-// 출처: COSMICO 쇼핑몰(cosmicokorea.com/shop) 디앤에잇·모댑·사가유·프로모션 카테고리
+// 출처: COSMICO 쇼핑몰(cosmicokorea.com/shop) 디앤에잇·모댑·사가유·프로모션 카테고리 + 각 제품 상세 이미지
 // 제외: 종이봉투, 코즈미코 프로페셔널(패키지·BBTT), IGBI(자격시험)
 //
 // 가격 규칙
 // - regularPrice : 일반가 = COSMICO 쇼핑몰 판매가
-// - studentPrice : 수강생가. 비워두면 STUDENT_DISCOUNT_RATE 로 자동 계산
-//   ⚠️ 할인율은 예시값입니다. 확정되면 아래 숫자만 바꾸거나 제품별 studentPrice 를 직접 입력하세요.
+// - 수강생가     : STUDENT_DISCOUNT_RATE 가 null 이면 "별도 안내"로 표시
+//                  할인율이 정해지면 0.1(=10%)처럼 숫자를 넣으면 전체에 자동 적용
+//                  제품별로 다르게 하려면 해당 제품에 studentPrice 를 직접 입력
 
-export const STUDENT_DISCOUNT_RATE = 0.1; // 예시: 10%
+export const STUDENT_DISCOUNT_RATE: number | null = null; // 아직 미정
 
 export type ProductBrand = 'modab' | 'sagau' | 'dn8' | 'set';
 export type ProductStep = 'shampoo' | 'pack' | 'oil' | 'facial';
@@ -23,28 +24,32 @@ export interface Product {
   points: string[];
   regularPrice: number;
   studentPrice?: number;
-  image: string;
   soldOut?: boolean;
-  needsCopy?: boolean; // 쇼핑몰 상세가 이미지뿐이라 설명 문구 보완 필요
+  needsCopy?: boolean; // 설명 문구 보완 필요
   shopUrl: string;
 }
 
-const IMG = 'https://www.cosmicokorea.com/upload/Goods/img1/';
 const SHOP = 'https://www.cosmicokorea.com/shop/detailView.asp?gidx=';
 
+export const productImage = (p: Product) => `/images/products/${p.id}.webp`;
+
 export const brandInfo: Record<ProductBrand, { name: string; english: string; desc: string }> = {
-  modab: { name: '모댑', english: 'Mo dab', desc: '헤드스파의 시작, 두피 클렌징과 헤어팩' },
+  modab: { name: '모댑', english: 'Mo dab', desc: '헤드스파의 시작, 두피 클렌징과 두피팩' },
   sagau: { name: '사가유', english: 'SAGA.U', desc: '헤드스파 마사지를 완성하는 아로마 오일' },
-  dn8: { name: '디앤에잇', english: 'D&8', desc: '헤드스파 후 페이셜 마무리 스킨케어' },
+  dn8: {
+    name: '디앤에잇',
+    english: 'Dn.8',
+    desc: '한국 에스테틱 테크닉과 현장 경험으로 만든 전문가용 스킨케어',
+  },
   set: { name: '세트', english: 'Promotion', desc: '자주 쓰는 제품을 한 번에' },
 };
 
 // 시술 순서 (⚠️ 시안: 실제 수업 순서에 맞게 확인 필요)
 export const steps: { id: ProductStep; label: string; desc: string; brand: ProductBrand }[] = [
   { id: 'shampoo', label: '두피 클렌징', desc: '샴푸로 두피와 모발을 깨끗하게', brand: 'modab' },
-  { id: 'pack', label: '헤어팩', desc: '클렌징 후 모발·두피 케어', brand: 'modab' },
+  { id: 'pack', label: '두피팩', desc: '헤드스파 관리 후 거품 타입 두피팩', brand: 'modab' },
   { id: 'oil', label: '오일 마사지', desc: '고객 상태에 맞춘 아로마 오일', brand: 'sagau' },
-  { id: 'facial', label: '페이셜 마무리', desc: '부스터 → 세럼 → 크림', brand: 'dn8' },
+  { id: 'facial', label: '페이셜 마무리', desc: '클렌저 → 부스터 → 세럼 → 크림', brand: 'dn8' },
 ];
 
 export const products: Product[] = [
@@ -58,7 +63,6 @@ export const products: Product[] = [
     summary: '멘톨의 산뜻한 사용감으로 두피를 개운하게 클렌징하는 샴푸',
     points: ['순한 글루코사이드계 세정 성분', '병풀·네틀·당귀·로즈마리 추출물', '펌프 별도 동봉'],
     regularPrice: 66000,
-    image: `${IMG}nmpoei2.png`,
     shopUrl: `${SHOP}89`,
   },
   {
@@ -71,20 +75,22 @@ export const products: Product[] = [
     summary: '두피를 맑게, 마음을 편안하게. 만다린 향의 두피 웰니스 샴푸',
     points: ['만다린 껍질 오일·호호바 오일', '한방 식물 추출물 블렌딩', '거품 낸 뒤 3분 두면 더 좋아요'],
     regularPrice: 67000,
-    image: `${IMG}man0.png`,
     shopUrl: `${SHOP}114`,
   },
   {
     id: 'modab-plusmas',
     brand: 'modab',
     step: 'pack',
-    name: '모댑 플러스마스',
-    englishName: 'Plus Mas Hair Pack',
-    summary: '해양 성분과 식물 추출물을 담은 헤어팩',
-    needsCopy: true,
-    points: ['카페인·해수·다시마 추출물', '다마스크장미꽃수', '가수분해 콜라겐'],
+    name: '모댑 플러스마스 팩',
+    englishName: 'Plusmas Pack',
+    summary: '코즈미코 헤드스파 관리 후 사용하는 거품 타입 두피팩',
+    points: [
+      '간편한 사용, 잔여감 없는 마무리',
+      '샵 관리와 홈케어 모두 고려한 설계',
+      '다시마·바다포도 추출물·해양 심층수',
+      '황련·레몬·해바라기 추출물, 카페인 함유',
+    ],
     regularPrice: 59000,
-    image: `${IMG}plusmasx-001.png`,
     shopUrl: `${SHOP}105`,
   },
 
@@ -94,12 +100,12 @@ export const products: Product[] = [
     brand: 'sagau',
     step: 'oil',
     name: '뉴 사가유 오일 [혼합]',
-    englishName: 'SAGA.U Oil',
+    englishName: 'SAGAU Oil',
+    volume: '50ml',
     summary: '사가 오일 시리즈 · 헤드스파 관리용 아로마 오일',
     points: ['K 헤드스파 퍼스트 스텝 패키지 구성 오일'],
-    needsCopy: true,
     regularPrice: 140000,
-    image: `${IMG}010.png`,
+    needsCopy: true,
     shopUrl: `${SHOP}109`,
   },
   {
@@ -108,11 +114,14 @@ export const products: Product[] = [
     step: 'oil',
     name: '사가 스터디 오일',
     englishName: 'SAGA Study Oil',
-    summary: '사가 오일 시리즈 · 헤드스파 관리용 아로마 오일',
-    points: ['K 헤드스파 퍼스트 스텝 패키지 구성 오일'],
-    needsCopy: true,
+    volume: '50ml',
+    summary: '공부와 집중의 순간을 위한 아로마 블렌딩 오일',
+    points: [
+      '호호바 오일 베이스',
+      '레몬·라벤더·로즈마리·유칼립투스·편백·프랑킨센스·마조람·샌달우드',
+      '공부할 때, 명상할 때, 잠들기 전 향기 루틴으로',
+    ],
     regularPrice: 140000,
-    image: `${IMG}011.png`,
     shopUrl: `${SHOP}97`,
   },
   {
@@ -125,7 +134,6 @@ export const products: Product[] = [
     summary: '향과 성분에 민감한 고객을 위한, 사가 시리즈 중 가장 순한 오일',
     points: ['성분 단 4가지: 호호바·만다린·네롤리·동백', '불필요한 향과 성분을 뺀 최소 처방', '민감한 고객 관리용 대체 오일'],
     regularPrice: 140000,
-    image: `${IMG}012.png`,
     shopUrl: `${SHOP}111`,
   },
   {
@@ -137,7 +145,6 @@ export const products: Product[] = [
     summary: '장미와 자스민 향의 플로럴 아로마 오일',
     points: ['로즈힙씨 오일', '다마스크장미꽃 오일', '아라비안자스민꽃 오일'],
     regularPrice: 150000,
-    image: `${IMG}009.png`,
     soldOut: true,
     shopUrl: `${SHOP}110`,
   },
@@ -148,12 +155,11 @@ export const products: Product[] = [
     brand: 'dn8',
     step: 'facial',
     name: '디앤에잇 시카푸카 클렌저',
-    englishName: 'Cica Pukka Cleanser',
-    summary: '디앤에잇 라인의 클렌저',
-    points: ['K 헤드스파 퍼스트 스텝 패키지 구성품'],
-    needsCopy: true,
+    englishName: 'Cicapukka Cleanser',
+    volume: '100ml',
+    summary: '에스테틱에서 선택한 시카 진정 클렌저',
+    points: ['먼지·유분·메이크업을 녹이듯 세정', '세안 후 잔여감이 적은 사용감', '거칠고 예민해 보이는 피부 컨디션에'],
     regularPrice: 44000,
-    image: `${IMG}cicapukka_co-001.png`,
     shopUrl: `${SHOP}118`,
   },
   {
@@ -162,11 +168,10 @@ export const products: Product[] = [
     step: 'facial',
     name: '디앤에잇 리주버네이션 부스터',
     englishName: 'Rejuvenation Booster',
-    summary: '피부의 길을 열어주는 첫 번째 단계',
-    points: ['디앤에잇 부스터 → 세럼 → 크림 루틴의 첫 단계'],
-    needsCopy: true,
+    volume: '120ml',
+    summary: '피부의 길을 열어주는 첫 단계',
+    points: ['세안 후 가장 먼저 쓰는 고기능 부스터', '건조하고 거칠게 느껴지는 피부에', '모든 피부 타입'],
     regularPrice: 120000,
-    image: `${IMG}001%5B10%5D.png`,
     shopUrl: `${SHOP}104`,
   },
   {
@@ -174,25 +179,23 @@ export const products: Product[] = [
     brand: 'dn8',
     step: 'facial',
     name: '디앤에잇 블루 넵투누스 세럼',
-    englishName: 'Blue Neptunus Serum',
-    summary: '리뉴얼된 디앤에잇 블루 넵투누스 세럼',
-    points: ['디앤에잇 부스터 → 세럼 → 크림 루틴의 2단계'],
-    needsCopy: true,
+    englishName: 'Blue Neptūnus Serum',
+    volume: '50ml',
+    summary: '피부의 빛을 되찾는 힘',
+    points: ['부스터 다음 단계에 사용', '리뉴얼 제품', '모든 피부 타입'],
     regularPrice: 130000,
-    image: `${IMG}002%5B8%5D.png`,
     shopUrl: `${SHOP}112`,
   },
   {
     id: 'dn8-cream',
     brand: 'dn8',
     step: 'facial',
-    name: '디앤에잇 울트라 훼이셜_8 크림',
-    englishName: 'Ultra Facial_8 Cream',
-    summary: '디앤에잇 3단계 루틴을 마무리하는 크림',
-    points: ['디앤에잇 부스터 → 세럼 → 크림 루틴의 마지막 단계'],
-    needsCopy: true,
+    name: '디앤에잇 울트라_8 페이셜 크림',
+    englishName: 'Ultra_8 Facial Cream',
+    volume: '50g',
+    summary: '고영양으로 꽉 채우는 리페어 케어',
+    points: ['부스터 → 세럼 → 크림 루틴의 마무리', '모든 피부 타입'],
     regularPrice: 140000,
-    image: `${IMG}003%5B3%5D.png`,
     shopUrl: `${SHOP}113`,
   },
 
@@ -201,20 +204,20 @@ export const products: Product[] = [
     id: 'dn8-set3',
     brand: 'set',
     name: '[3세트] 디앤에잇 3종',
-    englishName: 'D&8 3-Step Set ×3',
+    englishName: 'Dn.8 3-Step Set ×3',
     volume: '부스터 3 · 세럼 3 · 크림 3 (총 9개)',
     summary: '부스터·세럼·크림 3단계 루틴을 3세트로 한 번에',
-    points: ['디앤에잇 3단계 루틴 전체 구성', '단품 합계와 같은 가격 (세트 혜택은 확인 필요)'],
+    points: ['디앤에잇 3단계 루틴 전체 구성', '샵 비치용으로 넉넉하게'],
     regularPrice: 1170000,
-    image: `${IMG}3.png`,
     shopUrl: `${SHOP}115`,
   },
 ];
 
-export function getStudentPrice(p: Product): number {
+/** 수강생가. 할인율 미정이면 null → 화면에 "별도 안내" */
+export function getStudentPrice(p: Product): number | null {
   if (p.studentPrice) return p.studentPrice;
-  // 100원 단위 내림
-  return Math.floor((p.regularPrice * (1 - STUDENT_DISCOUNT_RATE)) / 100) * 100;
+  if (STUDENT_DISCOUNT_RATE == null) return null;
+  return Math.floor((p.regularPrice * (1 - STUDENT_DISCOUNT_RATE)) / 100) * 100; // 100원 단위 내림
 }
 
 export const formatWon = (n: number) => `${n.toLocaleString('ko-KR')}원`;

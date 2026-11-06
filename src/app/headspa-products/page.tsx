@@ -8,6 +8,7 @@ import {
   steps,
   getStudentPrice,
   formatWon,
+  productImage,
   STUDENT_DISCOUNT_RATE,
   type Product,
   type ProductBrand,
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const BRAND_ORDER: ProductBrand[] = ['modab', 'sagau', 'dn8', 'set'];
-const discountPct = Math.round(STUDENT_DISCOUNT_RATE * 100);
+const discountPct = STUDENT_DISCOUNT_RATE == null ? null : Math.round(STUDENT_DISCOUNT_RATE * 100);
 
 function PriceBlock({ p }: { p: Product }) {
   const student = getStudentPrice(p);
@@ -33,9 +34,13 @@ function PriceBlock({ p }: { p: Product }) {
       </div>
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-xs font-bold text-[#C41E3A]">
-          수강생가 <span className="font-medium">({discountPct}%↓)</span>
+          수강생가{discountPct != null && <span className="font-medium"> ({discountPct}%↓)</span>}
         </span>
-        <span className="text-lg font-extrabold text-[#C41E3A]">{formatWon(student)}</span>
+        {student != null ? (
+          <span className="text-lg font-extrabold text-[#C41E3A]">{formatWon(student)}</span>
+        ) : (
+          <span className="text-sm font-bold text-[#C41E3A]">별도 안내</span>
+        )}
       </div>
     </div>
   );
@@ -46,7 +51,7 @@ function ProductCard({ p }: { p: Product }) {
     <article className="relative flex flex-col bg-white rounded-2xl border border-[#0A1628]/10 overflow-hidden shadow-sm">
       <div className="relative aspect-square bg-[#F5F0EB]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.image} alt={p.name} loading="lazy" className="absolute inset-0 w-full h-full object-contain p-6" />
+        <img src={productImage(p)} alt={p.name} loading="lazy" className="absolute inset-0 w-full h-full object-contain p-6" />
         {p.soldOut && (
           <span className="absolute top-3 left-3 bg-[#0A1628] text-white text-xs font-bold px-2.5 py-1 rounded-full">
             품절
@@ -85,7 +90,7 @@ export default function HeadspaProductsPage() {
       {/* 시안 안내 띠 */}
       <div className="bg-[#0A1628] pt-20">
         <div className="bg-yellow-300 text-[#0A1628] text-xs sm:text-sm text-center px-4 py-2">
-          <b>시안 미리보기</b> · 수강생가 {discountPct}%는 예시 · 시술 순서·제품 설명은 확인 필요 · 제품 사진은 COSMICO 사용 허락 후 확정
+          <b>시안 미리보기</b> · 수강생 할인율 미정(별도 안내로 표시) · 시술 순서 확인 필요
         </div>
       </div>
 
@@ -108,7 +113,7 @@ export default function HeadspaProductsPage() {
               <p className="mt-1 font-bold">누구나 구매</p>
             </div>
             <div className="rounded-xl border border-[#C41E3A] bg-[#C41E3A]/15 p-4">
-              <p className="text-xs text-[#ff8a9b]">수강생가 · {discountPct}% 할인</p>
+              <p className="text-xs text-[#ff8a9b]">수강생가{discountPct != null ? ` · ${discountPct}% 할인` : ' · 별도 안내'}</p>
               <p className="mt-1 font-bold">수강생·수료생 원장님</p>
             </div>
           </div>
@@ -176,8 +181,9 @@ export default function HeadspaProductsPage() {
             {b === 'sagau' && (
               <div className="mb-6 rounded-2xl bg-[#0A1628] text-white p-5 text-sm leading-relaxed">
                 <b className="text-[#f3d27a]">오일 고르는 법</b> · 향이나 성분에 민감한 고객은{' '}
-                <b>사가 만달라</b>(성분 4가지, 사가 시리즈 중 가장 순한 오일)를 권해요.
-                <span className="text-white/60"> 나머지 오일의 고객별 추천은 원장님 수업 기준으로 채워 넣을 예정입니다.</span>
+                <b>사가 만달라</b>(성분 4가지, 사가 시리즈 중 가장 순한 오일)를, 공부·명상처럼 집중이 필요한
+                고객에게는 <b>사가 스터디</b>를 권해요.
+                <span className="text-white/60"> 사가유·사가 노바의 고객별 추천은 원장님 수업 기준으로 채워 넣을 예정입니다.</span>
               </div>
             )}
 
